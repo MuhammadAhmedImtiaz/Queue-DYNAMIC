@@ -1,0 +1,83 @@
+#include <iostream>
+using namespace std;
+
+class Queue {
+private:
+    struct Node {
+        int token;
+        Node* link;
+    };
+
+    Node* head; // Pointer to the front of the queue
+    Node* tail; // Pointer to the rear of the queue
+    static int tokenCounter; // Counter for token generation
+
+public:
+    Queue() : head(NULL), tail(NULL) {} // Constructor initializes an empty queue
+
+    void firstInsert() {
+        Node* temp = new Node();
+        temp->token = ++tokenCounter;
+        temp->link = NULL;
+        head = tail = temp; // Initialize head and tail
+        cout << "YOUR TOKEN NUMBER IS " << temp->token << endl;
+    }
+
+    void inQueue() {
+        if (head == NULL) {
+            cout << "Queue is empty. Use firstInsert to initialize the queue.\n";
+            return;
+        }
+        Node* newNode = new Node();
+        newNode->token = ++tokenCounter;
+        newNode->link = NULL;
+        tail->link = newNode; // Append to the end of the queue
+        tail = newNode;
+        cout << "Added token: " << newNode->token << endl;
+    }
+
+    void Dequeue() {
+        if (head == NULL) {
+            cout << "Queue is empty. Nothing to dequeue.\n";
+            return;
+        }
+        Node* temp = head;
+        head = head->link; // Move head to the next node
+        cout << "Dequeued token: " << temp->token << endl;
+        delete temp; // Free memory
+        if (head == NULL) {
+            tail = NULL; // Reset tail if queue is empty
+        }
+    }
+
+    void print() {
+        if (head == NULL) {
+            cout << "Queue is empty.\n";
+            return;
+        }
+        Node* temp = head;
+        cout << "Queue contents:\n";
+        while (temp != NULL) {
+            cout << "TOKEN NUMBER: " << temp->token << endl;
+            temp = temp->link;
+        }
+    }
+};
+
+// Static member initialization
+int Queue::tokenCounter = 0;
+
+int main() {
+    Queue q;
+
+    q.firstInsert(); // First insert, initializes the queue
+    q.inQueue();     // Add more nodes
+    q.inQueue();
+    q.inQueue();
+    q.inQueue();
+    q.Dequeue();     // Remove the first node
+    q.inQueue();     // Add another node
+    q.print();       // Print the queue contents
+
+    return 0;
+}
